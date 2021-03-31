@@ -1,6 +1,5 @@
 
-from bungalowpark import db
-from bungalowpark import app, login
+from bungalowpark import db, app
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_bcrypt import Bcrypt
 
