@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <style>
+        .carousel-inner {
+            height: 25%;
+            max-height: 50vh;
+        }
+        .carousel-caption{
+            bottom: unset;
+            top: 25%;
+        }
+        nav{
+            background-color: ghostwhite;
+
+        }
+    </style>
+
+<title>Bungalow park</title>
+
+</head>
+<body>
+  
+      <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <div class="carousel-item w-100 active">
+              <div class="carousel-caption d-none d-md-block">
+                  <h1>Bungalowpark Zee en Duin </h1>
+              </div>
+            <img src="https://cdn.roompot.com/assets/imgs/vakantieparken/nederland/drenthe/bungalowpark-het-hart-van-drenthe/park-header/1196x490/2052953.jpg" class="d-block w-100" alt="...">
+          </div>
+    
+        </div>
+      </div>
+      <nav class="navbar navbar-expand-lg  navbar-light mb-2 ">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <!-- <li class="nav-item active">
+            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+          </li> -->
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{{ url_for('index') }}">Home</a>
+          </li>
+        </ul>
+        <ul class="navbar-nav">
+          {% if current_user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('logout') }}">Uitloggen</a>
+          </li>
+         
+          {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('register') }}">Registreren</a>
+          </li>
+          {% endif %}
+          
+        </ul>
+        </div>
+      </nav>
+{% block content %}
+
+{% endblock %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+</body>
+</html>
