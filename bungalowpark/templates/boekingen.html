@@ -1,6 +1,106 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="jumbotron">
-    <p>Gefeliciteerd! Inloggen gelukt!</p>
+{% for message in get_flashed_messages() %}
+<div class="alert alert-warning">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    {{ message }}
 </div>
+{% endfor %}
+<div class="container">
+  <h3>Recente boekingen</h3>
+    <div class="row">
+      
+        {% set count = namespace(value=0) %}
+        {% for boeking in nieuweBoekingen  %}
+        <div class="col-md-10">
+        <div class="card mb-12 mb-3" >
+           
+            <div class="row g-0">
+            <div class="col-md-3">
+                <img  class="img-fluid"  src="https://images.ctfassets.net/gxwgulxyxxy1/4J1luUndx2FU0RKJnkFFwB/1974f23ea4a85a22a7cee70da9b2d332/header_huisje_Nederland.jpg?fm=jpg&fl=progressive&w=250&h=180&fit=fill&q=25" alt="...">
+            </div>
+            <div class="col-md-8">
+                <a class=" cursor: pointer; " data-bs-toggle="collapse" data-bs-target="#collapseOne{{count.value}}" aria-expanded="true" aria-controls="collapseOne{{count.value}}">
+                <div class="card-body">
+                <h5 class="card-title">{{boeking.bungalow.naam}}</h5>
+                <!-- <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p> -->
+                <p class="card-text m-0"><small class="text-muted">Vakantiehuis - {{boeking.bungalow.bungalowType.aantalPersonen}} persoons - {{(boeking.bungalow.bungalowType.aantalPersonen / 2 )|int }} slaapkamers  </small></p>
+                <p class="card-text m-0"><small class="text-muted">geboekt voor week: {{boeking.weeknummer}} - voor € {{boeking.bungalow.bungalowType.weekprijs}},- </small></p>
+                <!-- <p class="card-text"><small class="text-muted">Vakantiehuis -  - 150 m² </small></p> - 150 m² -->
+               
+                <a style="color:#689fb8; cursor: pointer; text-decoration: unset;"  data-bs-toggle="collapse" data-bs-target="#collapseOne{{count.value}}" aria-expanded="true" aria-controls="collapseOne{{count.value}}" > Wijzig reservering</a>
+                 <!-- <a style="color:#689fb8; text-decoration: unset;" data-bs-toggle="modal" data-bs-target="#WijzigBoekingModal{{count.value}}" href="{{ url_for('register') }}" > Wijzig reservering</a> -->
+                <p class="card-text position-absolute"  style="width: 100%!important; text-align: right;" ></p>
+                </div>
+            </a>
+            <div id="collapseOne{{count.value}}" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    <div class="card-body">
+                        geboekt voor week: {{boeking.weeknummer}}
+                    </div>
+                   
+                </div>
+              </div>
+            </div>
+            </div>
+        </a>
+        </div>
+    </div>
+    <div class="modal fade" id="WijzigBoekingModal{{count.value}}" tabindex="-1" aria-labelledby="WijzigBoekingModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="WijzigBoekingModalLabel">{{boeking.bungalow.naam}}</h5>
+              <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">&times;</button>
+            </div>
+            <div class="modal-body">
+                geboekt voor week: {{boeking.weeknummer}}
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div>  
+    
+        <!-- <h5 class="card-title"> Bungalow boeken {{boeking.bungalow.naam}} </h5> -->
+        {% set count.value = count.value + 1 %}
+        {% endfor %}
+        
+    </div>
+    <h3>Oude boekingen</h3>
+    <div class="row">
+      {% for boeking in oudeBoekingen  %}
+        <div class="col-md-10">
+        <div class="card mb-12 mb-3" >
+           
+            <div class="row g-0">
+            <div class="col-md-3">
+                <img  class="img-fluid"  src="https://images.ctfassets.net/gxwgulxyxxy1/4J1luUndx2FU0RKJnkFFwB/1974f23ea4a85a22a7cee70da9b2d332/header_huisje_Nederland.jpg?fm=jpg&fl=progressive&w=250&h=180&fit=fill&q=25" alt="...">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                <h5 class="card-title">{{boeking.bungalow.naam}}</h5>
+                <!-- <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p> -->
+                <p class="card-text m-0"><small class="text-muted">Vakantiehuis - {{boeking.bungalow.bungalowType.aantalPersonen}} persoons - {{(boeking.bungalow.bungalowType.aantalPersonen / 2 )|int }} slaapkamers  </small></p>
+                <p class="card-text m-0"><small class="text-muted">geboekt voor week: {{boeking.weeknummer}} - voor € {{boeking.bungalow.bungalowType.weekprijs}},- </small></p>
+                
+                </div>
+            </a>
+        
+            </div>
+            </div>
+        </a>
+        </div>
+    </div>
+    
+        
+        {% set count.value = count.value + 1 %}
+        {% endfor %}
+    </div>
+   
+</div>
+
+ 
 {% endblock %}

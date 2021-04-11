@@ -3,8 +3,23 @@
 <head>
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
     <style>
+        body{
+          background-color: #f1f1f1;
+          font-family: sans-serif;
+        }
+        .backgroundColorBlue{
+          background-color: #689fb8;
+          color: white;
+          border-color: #689FC7;
+        }
+        .btn-primary:hover {
+          color: #fff;
+          background-color: #689fb8a3!important;
+          border-color: #689fb8a3!important;
+        }
         .carousel-inner {
             height: 25%;
             max-height: 50vh;
@@ -13,6 +28,29 @@
             bottom: unset;
             top: 25%;
         }
+        nav{
+            /* background-color: ghostwhite; */
+            background-color: #689fb8;
+        }
+        .center{
+          margin-right: auto;
+          margin-left: auto;
+          display: block;
+          text-align: center;
+        }
+      .text{
+        background-color: rgb(105 105 105 / 100%);
+        opacity: 0.9;
+        color: white;
+        margin-top: -60px;
+      }
+        .bootstrap-datetimepicker-widget .datepicker-days table tbody tr:hover {
+    background-color: #eee;
+}
+
+nav a.nav-link {
+    color: white!important;
+}
     </style>
 
 <title>Bungalow park</title>
@@ -31,7 +69,7 @@
     
         </div>
       </div>
-      <nav class="navbar navbar-expand-lg  navbar-light ">
+      <nav class="navbar navbar-expand-lg  navbar-light mb-5 ">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -43,6 +81,11 @@
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="{{ url_for('index') }}">Home</a>
           </li>
+          {% if current_user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{{ url_for('boekingen') }}">Mijn boekingen</a>
+          </li>
+          {% endif %}
         </ul>
         <ul class="navbar-nav">
           {% if current_user.is_authenticated %}
@@ -65,6 +108,79 @@
 {% block content %}
 
 {% endblock %}
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/momentjs/2.10.6/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/bootstrap.datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+<script>
+    
+// $(document).ready(function(){
+
+// //Initialize the datePicker(I have taken format as mm-dd-yyyy, you can     //have your owh)
+// $("#weeklyDatePicker").datetimepicker({
+//     format: 'MM-DD-YYYY'
+// });
+
+//  //Get the value of Start and End of Week
+// $('#weeklyDatePicker').on('dp.change', function (e) {
+    
+//     var value = $("#weeklyDatePicker").val();
+//     console.log(moment(value, "MM-DD-YYYY"))
+//     var firstDate = moment(value, "MM-DD-YYYY").day(0).format("DD-MM-YYYY");
+//     var lastDate =  moment(value, "MM-DD-YYYY").day(6).format("DD-MM-YYYY");
+//     $("#weeklyDatePicker").val(firstDate + " - " + lastDate);
+// });
+// });
+  
+$(document).ready(function(){
+    moment.locale('en', {
+      week: { dow: 1 } // Monday is the first day of the week
+    });
+  var date = new Date();
+
+  var disabledDate = ['2020-1-1', '04-09-2021', '2021-4-9','2020-1-3'];
+  $("#weeklyDatePicker").datetimepicker({
+      format: 'MM-DD-YYYY',
+      minDate: date,
+      maxDate: '01-01-2022'
+      
+      // disabledDates: disabledDate,
+  });
+  w = 16;
+  y = 2021
+  getDateOfWeek('16','2021')
+  function getDateOfWeek(w, y) {
+    var d = (1 + (w - 1) * 7); // 1st of January + 7 days for each week
+    console.log(new Date(y, 0, d))
+  // return new Date(y, 0, d);
+  }
+
+   //Get the value of Start and End of Week
+  $('#weeklyDatePicker').on('dp.change', function (e) {
+      var value = $("#weeklyDatePicker").val();
+      var weeknumber = moment(value, "MM-DD-YYYY").week();
+      var firstDate = moment(value, "MM-DD-YYYY").day(1).format("DD-MM-YYYY");
+      var lastDate =  moment(value, "MM-DD-YYYY").day(7).format("DD-MM-YYYY");
+      $('#weeknumber').val(weeknumber);
+      $('#bookingData').text('U aankomst is op ' + firstDate + ' (15:00 uur) en vertrek op ' + lastDate + ' (10:00 uur). Dit is week ' + weeknumber)
+      $("#test1").val(firstDate + " - " + lastDate);
+      
+      $("#weeklyDatePicker").val(firstDate + " - " + lastDate);
+  });
+  var disabledDate = ['2020-1-1', '2021-4-9','2020-1-3'];
+
+  // $('#weeklyDatePicker').datetimepicker({
+
+  //     disabledDates: disabledDate
+
+  // });
+  // show the alert
+  $(".alert").delay(4000).slideUp(200, function() {
+    $(this).alert('close');
+  });
+
+});
+</script>
 </body>
 </html>

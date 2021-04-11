@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% block content %}
+{% for message in get_flashed_messages() %}
+<div class="alert alert-warning">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    {{ message }}
+</div>
+{% endfor %}
+<!-- {% for bungalow in bungalow  %} -->
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 col-md-8">
+                <div class="image">
+                    <img  class="img-fluid center"  src="https://images.ctfassets.net/gxwgulxyxxy1/4J1luUndx2FU0RKJnkFFwB/1974f23ea4a85a22a7cee70da9b2d332/header_huisje_Nederland.jpg?fm=jpg&fl=progressive&w=500&h=300&fit=fill&q=25" alt="...">
+                </div>
+                <div class="text p-2" style="background-color: dimgray; color: white;">
+                    <h2>{{bungalow.naam.capitalize()}}</h2>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"> Bungalow boeken  </h5>
+                        <p class="card-text">{{bungalow.bungalowType.aantalPersonen}} persoons - {{(bungalow.bungalowType.aantalPersonen / 2 )|int }} slaapkamers </p>           
+                        <p class="card-text">€ {{bungalow.bungalowType.weekprijs}},- </p>                
+                        <!-- <div class="input-group" id="DateDemo"> -->
+                        <!-- <div class="input-group" >
+                            <input type='text' id='weeklyDatePicker' placeholder="Select Week" />
+                        </div>  -->
+
+                        <!-- <div class="input-group " >
+                            <input type='text' id='weeklyDatePicker' placeholder="Select Week" />
+                            <input type="hidden" id='weeknumber'/>
+                            <p class='mt-2'id='bookingData'></p>
+                        </div> -->
+                        <button type="button" class="btn btn-primary backgroundColorBlue float-right" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            Boek nu 
+                        </button>
+                        <!-- <a href="#" class="btn btn-primary mt-2 float-right">Boek nu</a> -->
+                    </div>        
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-8">
+                <div class="row mt-4">
+                    <div class="col-sm-12 col-md-4">
+                        <h3>Algemeen</h3>
+                        <ol class="list-unstyled inline-block">
+                            <li><i class="mr-2 fas fa-check"></i>Rookvrij</li>
+                            <li><i class="mr-2 fas fa-check"></i>Wifi</li>
+                        </ol>
+                    </div>
+                    <div class="col-sm-12 col-md-4">
+                        <h3>Slaapkamer</h3>
+                        <ol class="list-unstyled inline-block">
+                            <li><i class="mr-2 fas fa-check"></i>{{(bungalow.bungalowType.aantalPersonen / 2 )|int }} Slaapkamers</li>
+                            <li><i class="mr-2 fas fa-check"></i>Opgemaakte bedden bij aankomst</li>
+                        </ol> 
+                    </div> 
+                    <div class="col-sm-12 col-md-4">
+                        <h3>Keuken</h3>
+                        <ol class="list-unstyled inline-block">
+                            <li><i class="mr-2 fas fa-check"></i>Koelkast</li>
+                            <li><i class="mr-2 fas fa-check"></i>Diepvries</li>
+                            <li><i class="mr-2 fas fa-check"></i>Magnetron</li>
+                            <li><i class="mr-2 fas fa-check"></i>Koffiezetapparaat</li>
+                        </ol>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+ <!-- Button trigger modal -->
+
+  
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Reserveer nu {{bungalow.naam.capitalize()}}</h5>
+          <!-- <button type="button" class="close" data-dismiss="alert"></button> -->
+          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">&times;</button>
+        </div>
+        <form method="POST">
+        <div class="modal-body">
+            {% if current_user.is_authenticated %}
+            <div class="input-group " >
+                {{ form.csrf_token() }}
+                <div class="mb-3">
+                    <label for="weeklyDatePicker" class="form-label">Selecteer een week:</label>
+                    <br>
+                    <input type='text' class="form-control" id='weeklyDatePicker' placeholder="Select Week" />
+                </div>
+                {{ form.weeknummer(id="weeknumber") }}
+                {{ form.bungalowID(value=bungalow.id) }}
+                <p class='mt-2'id='bookingData'></p>
+            </div>
+          {% else %}
+            <p>Om een bungalow te boeken moet u eerst inloggen.
+                
+            </p>
+            <a href="{{ url_for('login') }}">Inloggen</a>
+          {% endif %}
+
+        
+                  
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuleren</button>
+          {% if current_user.is_authenticated %}
+          {{ form.submit(class="btn btn-primary backgroundColorBlue") }}
+          {% endif %}
+          <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+        </div>
+    </form>
+      </div>
+    </div>
+  </div>
+
+
+    <!-- <div class="card mb-12" style="max-width: 540px;"> -->
+   
+       
+         
+      <!-- {% endfor %} -->
+{% endblock %}
