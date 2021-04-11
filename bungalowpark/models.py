@@ -1,12 +1,9 @@
 
-from . import db, app, login_manager
+from bungalowpark import db, app
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import UserMixin
 # from flask_bcrypt import Bcrypt
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(user_id)
 
+# bcrypt = Bcrypt(app)
 class Bungalow(db.Model):
 
     __tablename__ = 'bungalows'
@@ -24,7 +21,7 @@ class Bungalow(db.Model):
         self.typeID = typeID
     
     def __repr__(self):
-        return f"De naam {self.naam} en het type is  { self.bungalowType.aantalPersonen}"
+        return f"De naam {self.naam} en het type is  { self.typeID.aantalPersonen}"
 
 class BungalowType(db.Model):
 
@@ -41,23 +38,25 @@ class BungalowType(db.Model):
     def __repr__(self):
         return f"Dit type heeft plaats voor {self.aantalPersonen} personen en weekprijs is {self.weekprijs} "
 
-
-class User(db.Model,UserMixin):
+class User(db.Model):
 
     __tablename__ = 'users'
 
     id = db.Column(db.Integer(),primary_key= True)
-    email = db.Column(db.String(64), unique=True, nullable=False, index=True)
     username = db.Column(db.String(64), unique=True, nullable=False, index=True)
-    password_hash = db.Column(db.String(120), nullable=False)
+    password = db.Column(db.String(120), nullable=False)
 
-    def __init__(self, email, username,password):
-        self.email = email
+    def __init__(self,username,password):
         self.username = username
-        self.password_hash = generate_password_hash(password)
+        # self.password = generate_password_hash(password)
+        self.password = bcrypt.generate_password_hash(password).decode('utf-8')
 
     def check_password(self, password):
-        return check_password_hash(self.password_hash, password)
+        return bcrypt.check_password_hash(self.password, password)
+
+    # @login.user.loader
+    # def load_user(user_id):
+    #     return User.query.get(id)
 
     def __repr__(self):
         return f"De gebruikers naam is  {self.username}"
@@ -83,3 +82,10 @@ class Boeking(db.Model):
         return f"de boeking is gedaan bij {self.userID.username} voor week  {self.weeknummer}. De bungalow is {self.bungalowID.naam}"
 
 db.create_all()
+
+# type1 = Bungalow('paarse bungalow',1)
+# db.session.add_all([type1])
+
+# # Vastleggen in de database
+# db.session.commit()
+# print(type1)
